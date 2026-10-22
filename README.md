@@ -5,3 +5,4 @@ Creates a user in the target OU, sets initial password, assigns group membership
 
 ## Usage
 ```powershell
+.\AD_NewUser.ps1 -FirstName "Jane" -LastName "Doe" -OU "Sales" -TempPassword "P@ssw0rd123"
