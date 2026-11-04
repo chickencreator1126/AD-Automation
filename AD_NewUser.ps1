@@ -16,6 +16,11 @@ $sAMAccountName = $FirstName.Substring(0,1) + $LastName.ToLower()
 $displayName = "$FirstName $LastName"
 $userPrincipalName = "$sAMAccountName@homedomain.local"
 
+if (Get-ADUser -Filter "SamAccountName -eq '$sAMAccountName'") {
+    Write-Host "User $sAMAccountName already exists." -ForegroundColor Red
+    exit
+}
+
 New-ADUser `
     -Name "$LastName, $FirstName" `
     -SamAccountName $sAMAccountName `
@@ -26,6 +31,8 @@ New-ADUser `
     -AccountPassword (ConvertTo-SecureString $TempPassword -AsPlainText -Force) `
     -ChangePasswordAtLogon $true `
     -Enabled $true
+
+Add-ADGroupMember -Identity "$OU-Team" -Members $sAMAccountName
 
 # Write confirmation
 Write-Host "Created: $displayName ($sAMAccountName) in $OU" -ForegroundColor Green
